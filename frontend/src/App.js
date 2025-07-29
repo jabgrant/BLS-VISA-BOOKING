@@ -862,7 +862,10 @@ const BLSAutomation = ({ systemStatus, onStatusChange, showMessage, loading, set
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-900">BLS Automation System</h2>
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900">BLS Automation System</h2>
+          <p className="text-sm text-gray-600 mt-1">Start booking automation - captcha solving happens automatically</p>
+        </div>
         <div className="flex space-x-3">
           {systemStatus.is_running ? (
             <button
@@ -965,200 +968,190 @@ const BLSAutomation = ({ systemStatus, onStatusChange, showMessage, loading, set
         </div>
       </div>
 
-      {/* Enhanced Booking Form */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white border rounded-lg p-6">
-          <h3 className="text-lg font-semibold mb-4">📋 Book Appointment</h3>
-          <form onSubmit={handleBookAppointment} className="space-y-4">
-            
-            {/* Schengen Visa History */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Schengen Visa History *
-              </label>
-              <select
-                value={bookingForm.schengen_visa_history}
-                onChange={(e) => handleSchengenHistoryChange(e.target.value)}
-                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
-              >
-                {visaInfo.schengen_history_options.map((option) => (
-                  <option key={option.value} value={option.value}>{option.label}</option>
-                ))}
-              </select>
-              <p className="mt-1 text-xs text-gray-500">
-                Select your Schengen visa history to determine eligible categories.
-              </p>
+      {/* Captcha Auto-Solve Info Panel */}
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+        <div className="flex items-start">
+          <div className="flex-shrink-0">
+            <div className="flex items-center justify-center h-8 w-8 rounded-full bg-blue-100">
+              <svg className="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
             </div>
-
-            {/* Location */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Location *</label>
-              <select
-                value={bookingForm.location}
-                onChange={(e) => handleLocationChange(e.target.value)}
-                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
-              >
-                {visaInfo.locations.map((location) => (
-                  <option key={location} value={location}>{location}</option>
-                ))}
-              </select>
-            </div>
-            
-            {/* Category with Validation */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Category *
-              </label>
-              <select
-                value={bookingForm.category}
-                onChange={(e) => handleCategoryChange(e.target.value)}
-                className={`mt-1 block w-full border rounded-md px-3 py-2 text-sm ${
-                  categoryValidation.is_valid ? 'border-gray-300' : 'border-red-500'
-                }`}
-              >
-                {visaInfo.categories_by_location[bookingForm.location]?.map((category) => (
-                  <option key={category} value={category}>{category}</option>
-                ))}
-              </select>
-              {categoryValidation.message && (
-                <p className={`mt-1 text-xs ${categoryValidation.is_valid ? 'text-green-600' : 'text-red-600'}`}>
-                  {categoryValidation.message}
-                </p>
-              )}
-              <p className="mt-1 text-xs text-gray-500">
-                {visaInfo.category_requirements[bookingForm.category]}
-              </p>
-            </div>
-            
-            {/* Visa Type */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Visa Type *</label>
-              <select
-                value={bookingForm.visa_type}
-                onChange={(e) => setBookingForm({...bookingForm, visa_type: e.target.value})}
-                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
-              >
-                {visaInfo.visa_types.map((type) => (
-                  <option key={type} value={type}>{type}</option>
-                ))}
-              </select>
-            </div>
-            
-            {/* Visa Sub-Type */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Visa Sub-Type *</label>
-              <select
-                value={bookingForm.visa_sub_type}
-                onChange={(e) => setBookingForm({...bookingForm, visa_sub_type: e.target.value})}
-                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
-              >
-                {visaInfo.visa_sub_types.map((subType) => (
-                  <option key={subType} value={subType}>{subType}</option>
-                ))}
-              </select>
-            </div>
-            
-            {/* Appointment For */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Appointment For *</label>
-              <select
-                value={bookingForm.appointment_for}
-                onChange={(e) => setBookingForm({...bookingForm, appointment_for: e.target.value})}
-                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
-              >
-                <option value="Individual">Individual</option>
-                <option value="Family">Family</option>
-              </select>
-            </div>
-            
-            {/* Number of Members for Family */}
-            {bookingForm.appointment_for === 'Family' && (
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Number of Members</label>
-                <input
-                  type="number"
-                  min="1"
-                  max="10"
-                  value={bookingForm.number_of_members}
-                  onChange={(e) => setBookingForm({...bookingForm, number_of_members: parseInt(e.target.value)})}
-                  className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
-                />
-                <p className="mt-1 text-xs text-gray-500">
-                  Family members must have same surname (except spouses). Proof of relationship required if surnames differ.
-                </p>
-              </div>
-            )}
-
-            {/* Premium Lounge */}
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                checked={bookingForm.has_premium_lounge}
-                onChange={(e) => setBookingForm({...bookingForm, has_premium_lounge: e.target.checked})}
-                className="h-4 w-4 text-blue-600 border-gray-300 rounded"
-              />
-              <label className="ml-2 block text-sm text-gray-900">Premium Lounge Service</label>
-            </div>
-            <p className="text-xs text-gray-500 -mt-2">
-              ℹ️ Premium lounge is optional and does not guarantee earlier appointments.
+          </div>
+          <div className="ml-3">
+            <h3 className="text-sm font-medium text-blue-800">Automatic Captcha Solving</h3>
+            <p className="mt-1 text-sm text-blue-700">
+              🤖 The system automatically solves captchas in the background during booking process. 
+              No manual intervention required - just click "Book Appointment" to start the automation.
             </p>
+          </div>
+        </div>
+      </div>
 
-            {/* Notes */}
+      {/* Enhanced Booking Form - Full Width */}
+      <div className="bg-white border rounded-lg p-6">
+        <h3 className="text-lg font-semibold mb-4">📋 Book Appointment</h3>
+        <form onSubmit={handleBookAppointment} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          
+          {/* Schengen Visa History */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Schengen Visa History *
+            </label>
+            <select
+              value={bookingForm.schengen_visa_history}
+              onChange={(e) => handleSchengenHistoryChange(e.target.value)}
+              className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+            >
+              {visaInfo.schengen_history_options.map((option) => (
+                <option key={option.value} value={option.value}>{option.label}</option>
+              ))}
+            </select>
+            <p className="mt-1 text-xs text-gray-500">
+              Select your Schengen visa history to determine eligible categories.
+            </p>
+          </div>
+
+          {/* Location */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Location *</label>
+            <select
+              value={bookingForm.location}
+              onChange={(e) => handleLocationChange(e.target.value)}
+              className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+            >
+              {visaInfo.locations.map((location) => (
+                <option key={location} value={location}>{location}</option>
+              ))}
+            </select>
+          </div>
+          
+          {/* Category with Validation */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Category *
+            </label>
+            <select
+              value={bookingForm.category}
+              onChange={(e) => handleCategoryChange(e.target.value)}
+              className={`mt-1 block w-full border rounded-md px-3 py-2 text-sm ${
+                categoryValidation.is_valid ? 'border-gray-300' : 'border-red-500'
+              }`}
+            >
+              {visaInfo.categories_by_location[bookingForm.location]?.map((category) => (
+                <option key={category} value={category}>{category}</option>
+              ))}
+            </select>
+            {categoryValidation.message && (
+              <p className={`mt-1 text-xs ${categoryValidation.is_valid ? 'text-green-600' : 'text-red-600'}`}>
+                {categoryValidation.message}
+              </p>
+            )}
+            <p className="mt-1 text-xs text-gray-500">
+              {visaInfo.category_requirements[bookingForm.category]}
+            </p>
+          </div>
+          
+          {/* Visa Type */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Visa Type *</label>
+            <select
+              value={bookingForm.visa_type}
+              onChange={(e) => setBookingForm({...bookingForm, visa_type: e.target.value})}
+              className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+            >
+              {visaInfo.visa_types.map((type) => (
+                <option key={type} value={type}>{type}</option>
+              ))}
+            </select>
+          </div>
+          
+          {/* Visa Sub-Type */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Visa Sub-Type *</label>
+            <select
+              value={bookingForm.visa_sub_type}
+              onChange={(e) => setBookingForm({...bookingForm, visa_sub_type: e.target.value})}
+              className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+            >
+              {visaInfo.visa_sub_types.map((subType) => (
+                <option key={subType} value={subType}>{subType}</option>
+              ))}
+            </select>
+          </div>
+          
+          {/* Appointment For */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Appointment For *</label>
+            <select
+              value={bookingForm.appointment_for}
+              onChange={(e) => setBookingForm({...bookingForm, appointment_for: e.target.value})}
+              className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+            >
+              <option value="Individual">Individual</option>
+              <option value="Family">Family</option>
+            </select>
+          </div>
+          
+          {/* Number of Members for Family */}
+          {bookingForm.appointment_for === 'Family' && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Notes (Optional)</label>
-              <textarea
-                value={bookingForm.notes}
-                onChange={(e) => setBookingForm({...bookingForm, notes: e.target.value})}
-                rows="2"
+              <label className="block text-sm font-medium text-gray-700 mb-1">Number of Members</label>
+              <input
+                type="number"
+                min="1"
+                max="10"
+                value={bookingForm.number_of_members}
+                onChange={(e) => setBookingForm({...bookingForm, number_of_members: parseInt(e.target.value)})}
                 className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
-                placeholder="Any additional notes..."
               />
+              <p className="mt-1 text-xs text-gray-500">
+                Family members must have same surname (except spouses). Proof of relationship required if surnames differ.
+              </p>
             </div>
-            
+          )}
+
+          {/* Premium Lounge */}
+          <div className="flex items-center md:col-span-2">
+            <input
+              type="checkbox"
+              checked={bookingForm.has_premium_lounge}
+              onChange={(e) => setBookingForm({...bookingForm, has_premium_lounge: e.target.checked})}
+              className="h-4 w-4 text-blue-600 border-gray-300 rounded"
+            />
+            <label className="ml-2 block text-sm text-gray-900">Premium Lounge Service</label>
+            <span className="ml-2 text-xs text-gray-500">
+              (Optional - does not guarantee earlier appointments)
+            </span>
+          </div>
+
+          {/* Notes */}
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-gray-700 mb-1">Notes (Optional)</label>
+            <textarea
+              value={bookingForm.notes}
+              onChange={(e) => setBookingForm({...bookingForm, notes: e.target.value})}
+              rows="2"
+              className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+              placeholder="Any additional notes..."
+            />
+          </div>
+          
+          <div className="md:col-span-2">
             <button
               type="submit"
               disabled={loading || !systemStatus.is_running}
-              className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:opacity-50"
+              className="w-full bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 disabled:opacity-50 font-medium"
             >
-              {loading ? 'Booking...' : 'Book Appointment'}
+              {loading ? '🤖 Booking in progress... (Captcha will be solved automatically)' : '🚀 Start Booking Automation'}
             </button>
-          </form>
-        </div>
-
-        {/* Captcha Solver */}
-        <div className="bg-white border rounded-lg p-6">
-          <h3 className="text-lg font-semibold mb-4">🔍 Captcha Solver</h3>
-          <form onSubmit={handleSolveCaptcha} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Target Number</label>
-              <input
-                type="text"
-                value={captchaForm.target_number}
-                onChange={(e) => setCaptchaForm({...captchaForm, target_number: e.target.value})}
-                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
-                placeholder="Enter the number to find"
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Captcha Images</label>
-              <div className="mt-1 p-4 border-2 border-dashed border-gray-300 rounded-md text-center">
-                <p className="text-sm text-gray-500">
-                  In a real implementation, you would upload captcha images here.
-                  For demo purposes, click "Solve Captcha" to test the API.
-                </p>
-              </div>
-            </div>
-            
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 disabled:opacity-50"
-            >
-              {loading ? 'Solving...' : 'Solve Captcha'}
-            </button>
-          </form>
-        </div>
+            {!systemStatus.is_running && (
+              <p className="mt-2 text-xs text-red-600 text-center">
+                ⚠️ Please start the system first before booking
+              </p>
+            )}
+          </div>
+        </form>
       </div>
     </div>
   );
