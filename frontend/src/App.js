@@ -498,25 +498,19 @@ const ApplicantManagement = ({ applicants, onRefresh, showMessage, loading, setL
   );
 };
 
-// Credentials Management Component
+// Credentials Management Component - Simplified for BLS Spain Algeria login
 const CredentialsManagement = ({ credentials, onRefresh, showMessage, loading, setLoading }) => {
   const [showForm, setShowForm] = useState(false);
   const [editingCredential, setEditingCredential] = useState(null);
   const [formData, setFormData] = useState({
     email: '',
-    password: '',
-    name: '',
-    is_primary: false,
-    is_active: true
+    password: ''
   });
 
   const resetForm = () => {
     setFormData({
       email: '',
-      password: '',
-      name: '',
-      is_primary: false,
-      is_active: true
+      password: ''
     });
     setEditingCredential(null);
     setShowForm(false);
@@ -567,38 +561,13 @@ const CredentialsManagement = ({ credentials, onRefresh, showMessage, loading, s
     }
   };
 
-  const handleSetPrimary = async (id) => {
-    setLoading(true);
-    try {
-      await axios.post(`${API}/credentials/${id}/set-primary`);
-      showMessage('Primary credential updated!', 'success');
-      onRefresh();
-    } catch (error) {
-      showMessage('Error updating primary credential', 'error');
-      console.error('Error setting primary credential:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleTestCredential = async (id) => {
-    setLoading(true);
-    try {
-      const response = await axios.post(`${API}/credentials/${id}/test`);
-      showMessage(`Credential test: ${response.data.message}`, 'success');
-      onRefresh();
-    } catch (error) {
-      showMessage('Credential test failed', 'error');
-      console.error('Error testing credential:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-900">Credentials Management</h2>
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900">BLS Login Credentials</h2>
+          <p className="text-sm text-gray-600 mt-1">Credentials for BLS Spain Algeria login website</p>
+        </div>
         <button
           onClick={() => setShowForm(true)}
           className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
@@ -612,61 +581,38 @@ const CredentialsManagement = ({ credentials, onRefresh, showMessage, loading, s
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
           <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
             <h3 className="text-lg font-bold text-gray-900 mb-4">
-              {editingCredential ? 'Edit Credential' : 'Add New Credential'}
+              {editingCredential ? 'Edit BLS Login Credential' : 'Add BLS Login Credential'}
             </h3>
             
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Email</label>
+                <label className="block text-sm font-medium text-gray-700">Email *</label>
                 <input
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
                   className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+                  placeholder="Enter your BLS login email"
                   required
                 />
+                <p className="mt-1 text-xs text-gray-500">
+                  Your email for BLS Spain Algeria website login
+                </p>
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700">Password</label>
+                <label className="block text-sm font-medium text-gray-700">Password *</label>
                 <input
                   type="password"
                   value={formData.password}
                   onChange={(e) => setFormData({...formData, password: e.target.value})}
                   className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+                  placeholder="Enter your BLS login password"
                   required
                 />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Account Name</label>
-                <input
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
-                  required
-                />
-              </div>
-              
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={formData.is_primary}
-                  onChange={(e) => setFormData({...formData, is_primary: e.target.checked})}
-                  className="h-4 w-4 text-blue-600 border-gray-300 rounded"
-                />
-                <label className="ml-2 block text-sm text-gray-900">Set as Primary Credential</label>
-              </div>
-              
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={formData.is_active}
-                  onChange={(e) => setFormData({...formData, is_active: e.target.checked})}
-                  className="h-4 w-4 text-blue-600 border-gray-300 rounded"
-                />
-                <label className="ml-2 block text-sm text-gray-900">Active</label>
+                <p className="mt-1 text-xs text-gray-500">
+                  Your password for BLS Spain Algeria website login
+                </p>
               </div>
               
               <div className="flex space-x-3 pt-4">
@@ -695,10 +641,9 @@ const CredentialsManagement = ({ credentials, onRefresh, showMessage, loading, s
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Account Name</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Used</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
@@ -706,42 +651,17 @@ const CredentialsManagement = ({ credentials, onRefresh, showMessage, loading, s
             {credentials.map((credential) => (
               <tr key={credential.id}>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-900">{credential.name}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{credential.email}</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex space-x-2">
-                    {credential.is_primary && (
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                        Primary
-                      </span>
-                    )}
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                      credential.is_active ? 'bg-blue-100 text-blue-800' : 'bg-red-100 text-red-800'
-                    }`}>
-                      {credential.is_active ? 'Active' : 'Inactive'}
-                    </span>
-                  </div>
+                  <div className="text-sm font-medium text-gray-900">{credential.email}</div>
+                  <div className="text-xs text-gray-500">BLS Login Credential</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   {credential.last_used ? new Date(credential.last_used).toLocaleDateString() : 'Never'}
                 </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  {new Date(credential.created_at).toLocaleDateString()}
+                </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <div className="flex space-x-2">
-                    {!credential.is_primary && (
-                      <button
-                        onClick={() => handleSetPrimary(credential.id)}
-                        className="text-green-600 hover:text-green-900"
-                      >
-                        Set Primary
-                      </button>
-                    )}
-                    <button
-                      onClick={() => handleTestCredential(credential.id)}
-                      className="text-yellow-600 hover:text-yellow-900"
-                    >
-                      Test
-                    </button>
                     <button
                       onClick={() => handleEdit(credential)}
                       className="text-indigo-600 hover:text-indigo-900"
@@ -763,7 +683,8 @@ const CredentialsManagement = ({ credentials, onRefresh, showMessage, loading, s
         
         {credentials.length === 0 && (
           <div className="text-center py-8 text-gray-500">
-            No credentials found. Add your first credential to get started.
+            <div className="text-lg mb-2">No BLS login credentials found</div>
+            <div className="text-sm">Add your BLS Spain Algeria login credentials to start automation</div>
           </div>
         )}
       </div>
