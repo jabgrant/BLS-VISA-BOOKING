@@ -262,15 +262,8 @@ async def get_primary_applicant():
 
 @api_router.post("/credentials", response_model=Credential)
 async def create_credential(credential_data: CredentialCreate):
-    """Create new login credentials"""
+    """Create new login credentials for BLS Spain Algeria"""
     try:
-        # If this credential is marked as primary, unset any existing primary
-        if credential_data.is_primary:
-            await db.credentials.update_many(
-                {"is_primary": True}, 
-                {"$set": {"is_primary": False, "updated_at": datetime.utcnow()}}
-            )
-        
         credential_dict = credential_data.dict()
         credential = Credential(**credential_dict)
         
