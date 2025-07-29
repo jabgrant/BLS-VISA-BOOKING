@@ -76,13 +76,10 @@ class Applicant(ApplicantBase):
             datetime: lambda v: v.isoformat()
         }
 
-# Login Credentials Models
+# Login Credentials Models - Simplified for BLS Spain Algeria login
 class CredentialBase(BaseModel):
     email: str
     password: str
-    name: str
-    is_primary: bool = False
-    is_active: bool = True
 
 class CredentialCreate(CredentialBase):
     pass
