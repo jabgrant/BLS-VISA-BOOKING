@@ -711,11 +711,6 @@ const BLSAutomation = ({ systemStatus, onStatusChange, showMessage, loading, set
   const [categoryValidation, setCategoryValidation] = useState({ is_valid: true, message: '', recommended_categories: [] });
   const [showValidationModal, setShowValidationModal] = useState(false);
 
-  const [captchaForm, setCaptchaForm] = useState({
-    target_number: '7',
-    captcha_images: []
-  });
-
   // Load visa info on component mount
   useEffect(() => {
     fetchVisaInfo();
