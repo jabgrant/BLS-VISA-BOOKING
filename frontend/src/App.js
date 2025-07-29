@@ -822,25 +822,11 @@ const BLSAutomation = ({ systemStatus, onStatusChange, showMessage, loading, set
     setLoading(true);
     try {
       const response = await axios.post(`${API}/bls/book-appointment`, bookingForm);
-      showMessage(`Appointment booking completed! ID: ${response.data.booking_id}`, 'success');
+      showMessage(response.data.message, 'success');
     } catch (error) {
       const errorMessage = error.response?.data?.detail || 'Error booking appointment';
       showMessage(errorMessage, 'error');
       console.error('Error booking appointment:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleSolveCaptcha = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const response = await axios.post(`${API}/bls/solve-captcha`, captchaForm);
-      showMessage(`Captcha solved! Confidence: ${response.data.confidence}`, 'success');
-    } catch (error) {
-      showMessage('Error solving captcha', 'error');
-      console.error('Error solving captcha:', error);
     } finally {
       setLoading(false);
     }
