@@ -282,11 +282,10 @@ async def create_credential(credential_data: CredentialCreate):
         raise HTTPException(status_code=500, detail=f"Error creating credential: {str(e)}")
 
 @api_router.get("/credentials", response_model=List[Credential])
-async def get_credentials(skip: int = 0, limit: int = 100, active_only: bool = False):
-    """Get all credentials with filtering"""
+async def get_credentials(skip: int = 0, limit: int = 100):
+    """Get all credentials"""
     try:
-        filter_query = {} if not active_only else {"is_active": True}
-        cursor = db.credentials.find(filter_query).skip(skip).limit(limit).sort("created_at", -1)
+        cursor = db.credentials.find().skip(skip).limit(limit).sort("created_at", -1)
         credentials = await cursor.to_list(length=limit)
         return [Credential(**credential) for credential in credentials]
     except Exception as e:
