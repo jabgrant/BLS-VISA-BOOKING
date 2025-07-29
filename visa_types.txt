@@ -1,0 +1,212 @@
+Visa Information for Spain from Algeria
+July 29, 2025
+
+Introduction
+This document consolidates visa application information for Spain from Algeria into a single table,
+optimized to ﬁt within page margins for clarity and AI processing. Important notes and AI development
+guidance are listed separately to support accurate app implementation.
+
+1 Visa Information Table
+Visa History Requirements
+
+Appointment
+Type
+Individual /
+Family
+Individual /
+Family
+
+Location
+
+Category
+
+ORAN 1
+
+ORAN 1
+
+ORAN 2
+
+ORAN 2
+
+ORAN 3
+
+ORAN 3
+
+ORAN 4
+
+ORAN 4
+
+ALG 1
+
+ALG 1
+
+ALG 2
+
+ALG 2
+
+ALG 3
+
+ALG 3
+
+ALG 4
+
+ALG 4
+
+Not Speciﬁed
+
+FAMILY
+GROUP
+
+Children < 12, parents with visa
+valid > 180 days
+
+Family
+
+N/A
+
+Application
+Process
+
+N/A
+
+Individual /
+Family
+
+N/A
+
+Premium
+Lounge
+
+N/A
+
+Individual /
+Family
+
+N/A
+
+Travel
+Insurance
+
+N/A
+
+Individual /
+Family
+
+N/A
+
+Submission
+
+N/A
+
+Individual /
+Family
+
+Never obtained a Schengen visa
+or issued before 2020
+Schengen visa after Jan 1,
+2020, valid ≤ 6 months
+Schengen visa after Jan 1,
+2020, valid > 6 months, < 2
+years
+Schengen visa after Jan 1,
+2020, valid ≥ 2 years
+Never obtained a Schengen visa
+or issued before 2020
+Schengen visa after Jan 1,
+2020, valid ≤ 6 months
+Schengen visa after Jan 1,
+2020, valid > 6 months, < 2
+years
+Schengen visa after Jan 1,
+2020, valid ≥ 2 years
+
+Select visa type and
+sub-type (not speciﬁed).
+Select visa type and
+sub-type (not speciﬁed).
+
+Individual /
+Family
+
+Select visa type and
+sub-type (not speciﬁed).
+
+Individual /
+Family
+Individual /
+Family
+Individual /
+Family
+
+Select visa type and
+sub-type (not speciﬁed).
+Select visa type and
+sub-type (not speciﬁed).
+Select visa type and
+sub-type (not speciﬁed).
+
+Individual /
+Family
+
+Select visa type and
+sub-type (not speciﬁed).
+
+Individual /
+Family
+
+Select visa type and
+sub-type (not speciﬁed).
+For children < 12;
+requires proof of
+parental visa.
+Book, manage, cancel,
+or reprint via BLS
+platform.
+Optional; does not
+guarantee earlier
+appointments.
+Available during
+application process.
+Select location, visa
+type, sub-type, category,
+appointment type.
+
+Table 1: Comprehensive Visa Application Details
+
+1
+
+Additional Details
+
+2 Important Notes
+• Category Accuracy: Applicants must select a category matching their Schengen visa history. Incorrect selection leads to rejection at the visa center, with no refund of service fees.
+• Family Appointments: Members must be immediate family with the same surname (except spouses).
+Proof of relationship is required if surnames differ. The Visa Application Center manager may refuse
+applications without valid proof.
+• Family Group Category: Exclusively for children under 12 whose parents hold a visa valid for
+more than 180 days.
+• Registered User: The main applicant must complete the appointment process for family applications.
+
+3 Notes for AI Application Development
+• Data Structure: Create a database schema for locations, categories, visa history requirements, appointment types, and additional details. Use relational keys to link categories with locations and
+appointment types.
+• User Interface: Implement dropdowns for Location (ORAN 1-4, ALG 1-4), Category (ORAN 14, ALG 1-4, FAMILY GROUP), and Appointment Type (Individual, Family). Show Number of
+Members ﬁeld only for Family appointments.
+• Validation Logic: Validate category selection against visa history (e.g., ORAN 1/ALG 1 for no visa
+or pre-2020). Use client- and server-side checks with error messages for mismatches.
+• Family Appointment Handling: Require ﬁelds for each family members details and ﬁle upload
+for relationship proof if surnames differ. For FAMILY GROUP, verify parent visa (> 180 days) and
+child age (< 12).
+• Premium Lounge Option: Add a checkbox for Premium Lounge with a tooltip stating it does not
+prioritize appointments.
+• Appointment Management: Support booking, managing, canceling, and reprinting appointment
+letters. Track the main applicants session for family applications.
+• Error Handling: Show warnings about non-refunded fees for incorrect category selection. Prompt
+visa history conﬁrmation before submission.
+• Localization: Support English, Spanish, French, and Arabic with a language selector.
+• Security: Use secure authentication and encrypt sensitive data like relationship proofs.
+• API Integration: Ensure API calls support BLS platform functions for booking, cancellation, and
+letter reprinting.
+
+2
+
+
