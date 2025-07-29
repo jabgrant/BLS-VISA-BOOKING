@@ -315,13 +315,6 @@ async def update_credential(credential_id: str, credential_data: CredentialCreat
         if not existing:
             raise HTTPException(status_code=404, detail="Credential not found")
         
-        # If this credential is being set as primary, unset any existing primary
-        if credential_data.is_primary:
-            await db.credentials.update_many(
-                {"is_primary": True, "id": {"$ne": credential_id}}, 
-                {"$set": {"is_primary": False, "updated_at": datetime.utcnow()}}
-            )
-        
         update_data = credential_data.dict()
         update_data["updated_at"] = datetime.utcnow()
         
