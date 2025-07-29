@@ -361,74 +361,19 @@ async def delete_credential(credential_id: str):
         logging.error(f"Error deleting credential: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error deleting credential: {str(e)}")
 
-@api_router.get("/credentials/primary/info")
-async def get_primary_credential():
-    """Get primary credential for automation"""
+@api_router.get("/credentials/active/info")
+async def get_active_credential():
+    """Get first available credential for automation"""
     try:
-        primary_credential = await db.credentials.find_one({"is_primary": True, "is_active": True})
-        if not primary_credential:
-            raise HTTPException(status_code=404, detail="No primary credential found")
-        return Credential(**primary_credential)
-    except HTTPException:
-        raise
-    except Exception as e:
-        logging.error(f"Error fetching primary credential: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Error fetching primary credential: {str(e)}")
-
-@api_router.post("/credentials/{credential_id}/set-primary")
-async def set_primary_credential(credential_id: str):
-    """Set credential as primary"""
-    try:
-        # Check if credential exists
-        existing = await db.credentials.find_one({"id": credential_id})
-        if not existing:
-            raise HTTPException(status_code=404, detail="Credential not found")
-        
-        # Unset any existing primary
-        await db.credentials.update_many(
-            {"is_primary": True}, 
-            {"$set": {"is_primary": False, "updated_at": datetime.utcnow()}}
-        )
-        
-        # Set this credential as primary
-        await db.credentials.update_one(
-            {"id": credential_id},
-            {"$set": {"is_primary": True, "updated_at": datetime.utcnow()}}
-        )
-        
-        return {"message": "Credential set as primary successfully"}
-    except HTTPException:
-        raise
-    except Exception as e:
-        logging.error(f"Error setting primary credential: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Error setting primary credential: {str(e)}")
-
-@api_router.post("/credentials/{credential_id}/test")
-async def test_credential(credential_id: str):
-    """Test credential functionality"""
-    try:
-        credential = await db.credentials.find_one({"id": credential_id})
+        credential = await db.credentials.find_one()
         if not credential:
-            raise HTTPException(status_code=404, detail="Credential not found")
-        
-        # Update last_used timestamp
-        await db.credentials.update_one(
-            {"id": credential_id},
-            {"$set": {"last_used": datetime.utcnow(), "updated_at": datetime.utcnow()}}
-        )
-        
-        # In a real implementation, this would test the actual BLS login
-        # For now, return success status
-        return {
-            "status": "success",
-            "message": "Credential test completed",
-            "tested_at": datetime.utcnow().isoformat()
-        }
+            raise HTTPException(status_code=404, detail="No credential found")
+        return Credential(**credential)
     except HTTPException:
         raise
     except Exception as e:
-        logging.error(f"Error testing credential: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Error testing credential: {str(e)}")
+        logging.error(f"Error fetching credential: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error fetching credential: {str(e)}")
 
 # ==================== BLS AUTOMATION CORE SYSTEM ====================
 
