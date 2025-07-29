@@ -160,7 +160,7 @@ const App = () => {
           <nav className="flex space-x-8 px-6">
             {[
               { id: 'applicants', label: 'Applicant Management', icon: '👥' },
-              { id: 'credentials', label: 'Credentials Management', icon: '🔐' },
+              { id: 'credentials', label: 'BLS Login Credentials', icon: '🔐' },
               { id: 'automation', label: 'BLS Automation', icon: '🤖' },
               { id: 'bookings', label: 'Booking History', icon: '📋' }
             ].map((tab) => (
